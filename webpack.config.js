@@ -26,7 +26,7 @@ module.exports = ({ port }, { mode }) => ({
     }
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'docs'),
     filename: 'js/[name].js',
     chunkFilename: 'js/[id]_[hash].js'
   },

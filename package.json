@@ -10,6 +10,7 @@
     "url": "git+https://github.com/Tabacotaco/order-book.git"
   },
   "scripts": {
+    "build": "rm -rf build node_modules && npm ci && cross-env BABEL_ENV=production webpack --mode=production",
     "commit": "git-cz",
     "start": "webpack-dev-server --open --hot --mode=development --env port=3000"
   },
@@ -36,6 +37,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "clean-webpack-plugin": "^4.0.0",
     "commitizen": "^4.2.4",
+    "cross-env": "^7.0.3",
     "eslint": "^8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
