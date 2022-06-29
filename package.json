@@ -1,0 +1,61 @@
+{
+  "name": "order-book",
+  "version": "1.0.0",
+  "description": "This is an online test",
+  "license": "ISC",
+  "homepage": "https://github.com/Tabacotaco/order-book#readme",
+  "author": "Taco Chang",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tabacotaco/order-book.git"
+  },
+  "scripts": {
+    "commit": "git-cz",
+    "start": "webpack-dev-server --open --hot --mode=development --env port=3000"
+  },
+  "dependencies": {
+    "clsx": "^1.1.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
+    "shortid": "^2.2.16",
+    "styled-components": "^5.3.5",
+    "swr": "^1.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.6",
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "^7.18.6",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "babel-loader": "^8.2.5",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "commitizen": "^4.2.4",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "path": "^0.12.7",
+    "react-refresh": "^0.14.0",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.2"
+  },
+  "bugs": {
+    "url": "https://github.com/Tabacotaco/order-book/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
