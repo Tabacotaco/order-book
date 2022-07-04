@@ -33,26 +33,24 @@ const useOrderData = (() => {
 
         if ((type === 'sell' && price <= limit) || (type === 'buy' && price >= limit)) {
           if (!size) {
-            const index = result.findIndex((quote) => price === quote.price);
-
-            index >= 0 && result.splice(index, 1);
-          } else {
-            const index = result.findIndex((quote) => ((type === 'sell' && price <= quote.price) || (type === 'buy' && price >= quote.price)));
-            const quote = result[index];
-            const equal = quote.price === price;
-
-            result.splice(index < 0 ? 0 : index, index < 0 || !equal ? 0 : 1, {
-              price,
-              size,
-
-              ...(!equal && {
-                status: 'new'
-              }),
-              ...(equal && quote.size !== size && {
-                status: quote.size > size ? 'minus' : 'add'
-              })
-            });
+            return result.filter((quote) => price !== quote.price);
           }
+
+          const index = result.findIndex((quote) => ((type === 'sell' && price <= quote.price) || (type === 'buy' && price >= quote.price)));
+          const quote = result[index];
+          const equal = quote.price === price;
+
+          result.splice(index < 0 ? 0 : index, index < 0 || !equal ? 0 : 1, {
+            price,
+            size,
+
+            ...(!equal && {
+              status: 'new'
+            }),
+            ...(equal && quote.size !== size && {
+              status: quote.size > size ? 'minus' : 'add'
+            })
+          });
         }
 
         return result.slice(0, __WEBPACK_DEFINE__.MAX_QUOTE_ROWS);
