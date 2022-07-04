@@ -28,6 +28,7 @@ const DataTable = {
     ${({ theme, background }) => `
       display: flex;
       flex-direction: row;
+      transition: background .2s;
       ${theme[background] ? `background: ${theme[background]};` : ''}
 
       &:hover > * {

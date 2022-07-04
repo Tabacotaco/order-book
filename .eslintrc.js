@@ -16,7 +16,7 @@ module.exports = {
   globals: {
     __WEBPACK_DEFINE__: true,
   },
-  extends: ['airbnb', 'airbnb/hooks', 'prettier'],
+  extends: ['airbnb', 'airbnb/hooks'],
   ignorePatterns: ['dist/*', 'build/*'],
   rules: {
     'no-continue': 'warn',
@@ -81,5 +81,6 @@ module.exports = {
     'no-unused-vars': ['warn', { destructuredArrayIgnorePattern: '^_' }],
     'no-nested-ternary': 'warn',
     'jsx-a11y/aria-role': 'off',
-  },
+    'no-multiple-empty-lines': { max: 2 }
+  }
 };
