@@ -5,7 +5,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 
-const dependencies = ['react', 'react-router-dom', 'styled-components', 'swr'];
+const dependencies = ['react', 'react-router-dom', 'styled-components', 'react-toastify'];
 
 module.exports = ({ port }, { mode }) => ({
   mode,
@@ -52,14 +52,15 @@ module.exports = ({ port }, { mode }) => ({
     runtimeChunk: 'single'
   },
   plugins: [
-    ...(mode === 'production' ? [] : [new ReactRefreshWebpackPlugin({  })]),
+    ...(mode === 'production' ? [] : [new ReactRefreshWebpackPlugin()]),
     new CleanWebpackPlugin(),
 
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public/index.html')
     }),
     new DefinePlugin({
-
+      '__WEBPACK_DEFINE__.DISPLAY_QUOTE_ROWS': JSON.stringify(8),
+      '__WEBPACK_DEFINE__.MAX_QUOTE_ROWS': JSON.stringify(50)
     })
   ],
   module: {
@@ -74,6 +75,12 @@ module.exports = ({ port }, { mode }) => ({
           }
         })
       }]
+    }, {
+      test: /\.(css)$/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
     }, {
       test: /\.(eot|ttf|woff|woff2|svg|svgz|ico)(\?.+)?$/,
       use: [{
