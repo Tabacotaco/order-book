@@ -29,53 +29,61 @@ const useOrderData = (() => {
   const update = (type, quotes, previous) => (
     quotes.reduce(
       (result, { price, size }) => {
-        const { price: limit } = result[result.length - 1] || {};
+        const { price: limit } = result[result.length - 1] || {}; //* 取得畫面上八筆資料的最低買價 / 最高賣價
 
         if ((type === 'sell' && price <= limit) || (type === 'buy' && price >= limit)) {
+          //* size 為 0, 則移除該筆 Price 資料
           if (!size) {
             return result.filter((quote) => price !== quote.price);
           }
 
           const index = result.findIndex((quote) => ((type === 'sell' && price <= quote.price) || (type === 'buy' && price >= quote.price)));
-          const quote = result[index];
-          const equal = quote.price === price;
 
-          result.splice(index < 0 ? 0 : index, index < 0 || !equal ? 0 : 1, {
-            price,
-            size,
+          //* 當價格 (低於當前賣價/高於當前買價)
+          if (index >= 0) {
+            const quote = result[index];
+            const equal = quote.price === price; //* 判斷目標取代資料是否相同價格, 相同為更新 size, 不同則為插入新價格
 
-            ...(!equal && {
-              status: 'new'
-            }),
-            ...(equal && quote.size !== size && {
-              status: quote.size > size ? 'minus' : 'add'
-            })
-          });
+            result.splice(index, !equal ? 0 : 1, {
+              price,
+              size,
+  
+              ...(!equal && {
+                status: 'new' //* 表示為新加入之報價資料
+              }),
+              ...(equal && quote.size !== size && {
+                status: quote.size > size ? 'minus' : 'add' //* 判斷報價數量是變多或變少 (影響 size 欄位的提醒顏色)
+              })
+            });
+          }
         }
 
         return result.slice(0, __WEBPACK_DEFINE__.MAX_QUOTE_ROWS);
       },
-      previous.map(({ status: _s, ...quote }) => quote)
+      previous.map(({ status: _s, ...quote }) => quote) //* 捨棄前次 status 狀態
     )
   );
 
   function reducer(state, { type, data }) {
     switch (type) {
       case 'snapshot': {
-        const { asks, bids } = data;
+        const { asks, bids } = data; //* 後端資料預設排序為: Price 高 > 低
 
         return {
           ...state,
           seq: data.seqNum,
-          sell: transform(asks).reverse(),
-          buy: transform(bids)
+          sell: transform(asks).reverse(), //* 反轉排序為 低 > 高 (為了取最低賣價)
+          buy: transform(bids) //* 採預設排序 (為了取最高買價)
         };
       }
       case 'delta': {
         const { seq, sell, buy } = state;
+        
+        //* 此處取得之後端資料一樣有預設排序: Price 高 > 低
         const newSell = update('sell', transform(data.asks), sell);
         const newBuy = update('buy', transform(data.bids), buy);
 
+        //* 當 seq 不為前次紀錄值, 或買/賣報價資料不足 8 筆時, 重新連結取得完整資料
         return (seq !== data.prevSeqNum || newSell.length < __WEBPACK_DEFINE__.DISPLAY_QUOTE_ROWS || newBuy.length < __WEBPACK_DEFINE__.DISPLAY_QUOTE_ROWS)
           ? getInitial()
           : {
@@ -89,8 +97,9 @@ const useOrderData = (() => {
         const { last } = state;
         const [current, ...previous] = data;
 
+        //* 當成交價更新時, 除更新成交價, 同時需要判斷成交價是漲還是跌
         if (JSON.stringify(last?.price) !== JSON.stringify(current.price)) {
-          const prev = last?.price || previous.find(({ price }) => price !== current.price).price;
+          const prev = last?.price || previous.find(({ price }) => price !== current.price)?.price || current.price;
 
           return {
             ...state,
@@ -146,6 +155,7 @@ const useOrderData = (() => {
       return () => socket.close();
     }, [connect]);
 
+    //* 僅回傳應呈現於畫面上的資料筆數
     return {
       sell: sell.slice(0, __WEBPACK_DEFINE__.DISPLAY_QUOTE_ROWS),
       buy: buy.slice(0, __WEBPACK_DEFINE__.DISPLAY_QUOTE_ROWS),
